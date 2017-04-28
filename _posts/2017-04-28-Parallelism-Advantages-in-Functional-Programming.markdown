@@ -23,6 +23,7 @@ tags:
 先看一下经典的快速排序的C++实现：
 
 {% highlight c++ %}
+
 if __name__ =='__main__':
 	int partition(vector<int> &nums, int p, int r)
 	{
@@ -48,6 +49,7 @@ if __name__ =='__main__':
 			quick_sort(nums, q + 1, r);
 		}
 	}
+
 {% endhighlight %}
 
 其中`quick_sort`函数中`partition`函数必须先执行，之后的两个`quick_sort`函数可以并行执行。快速排序的原理很简单：随机选择数组中一个数，将数组分成两部分，一部分所有元素小于等于该数，另一部分所有元素大于该数；对两个数组递归调用快速排序，之后将整个数组整合起来。
@@ -67,3 +69,9 @@ if __name__ =='__main__':
 从本质上讲，这种复杂性源自于过程式编程的数学模型：[图灵机](https://en.wikipedia.org/wiki/Turing_machine)，图灵机简单来说包括一个写着0-1字符的纸带与可以读取纸带的机器，这个机器可以读取，修改纸带上的字符，移动到纸带的任意位置，从而实现各种运算。从定义上来说，图灵机是顺序式执行的设备，机器必须根据当前读取到的字符进行下一步的执行，这种执行方式导致了Data Dependency十分明显。那么问题来了：是否有另外一种模型没有那么严重的Data Dependency Issue?
 
 ## 函数式编程(Functional Programming)
+接着上面的问题，那么究竟有没有这种模型？ 答案是有的，有一种数学模型天生适合做并行化，叫做[Lambda表达式](https://en.wikipedia.org/wiki/Lambda_calculus)。这个数学模型后来在计算机领域衍生成另外一种编程范式，称为函数式编程(Functional Programming)。
+
+首先区分几个概念：
+1. Lambda表达式与图灵机是两种数学模型，其中Lambda表达式已经证明是Turing Complete的，意味着Lambda表达式可以模拟图灵机的全部运算。
+2. 过程式编程(Sequencial Programming)与函数式编程(Functional Programming)是两种编程范式，分别源自于图灵机与Lambda表达式两种数学模型
+3. 编程语言： 不同的编程语言支持不同的编程范式，这也是有各种各样的编程语言的原因之一。过程式编程的代表语言有汇编，B, C；函数式编程的代表语言有Haskell, Scala, Lisp等。当然现代编程语言会支持多种编程范式，C++, Python, Javascript等就支持以上两种编程范式，但是它们又有不同的侧重，这里就不详谈了。
