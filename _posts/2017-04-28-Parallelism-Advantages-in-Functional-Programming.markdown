@@ -76,3 +76,25 @@ void quick_sort(vector<int> &nums, int p, int r)
 3. 编程语言： 不同的编程语言支持不同的编程范式，这也是有各种各样的编程语言的原因之一。过程式编程的代表语言有汇编，B, C；函数式编程的代表语言有Haskell, Scala, Lisp等。当然现代编程语言会支持多种编程范式，C++, Python, Javascript等就支持以上两种编程范式，但是它们又有不同的侧重，这里就不详谈了。
 
 另外，本文章将使用Haskell作为函数式编程实例语言，一方面是因为Haskell是纯函数式编程语言，其内部实现严格遵循了Lambda表达式的演算方式，另一方面作者认为Haskell是一门逼格很高的语言......嗯。
+
+### 继续看快速排序
+
+回顾一下Quick Sort的表述：随机选择数组中一个数，将数组分成两部分，一部分所有元素小于等于该数，另一部分所有元素大于该数；对两个数组递归调用快速排序，之后将整个数组整合起来。
+
+我们可以换一种表述：
+1.Quick Sort是一个函数，这个函数接受一个数组，输出一个排好序的数组
+2.Quick Sort (array)= array1 ++ a ++ array2
+                      a: array的第一个元素
+                      array1: Quick Sort [array中所有小于a的元素组成的数组]
+                      array2: Quick Sort [array中所有大于等于a的元素组成的数组]
+
+我们可以看出两种表述方式很相近，第二种表述方式描述了快速排序作为一个函数的行为。
+
+让我们看一下Haskell表示的快排：
+
+{% highlight haskell %}
+
+qsort [] = []
+qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++ qsort (filter (>= x) xs)
+
+{% endhighlight %}
