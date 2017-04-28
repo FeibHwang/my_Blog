@@ -24,31 +24,30 @@ tags:
 
 {% highlight c++ %}
 
-if __name__ =='__main__':
-	int partition(vector<int> &nums, int p, int r)
+int partition(vector<int> &nums, int p, int r)
+{
+	int x = nums[r];
+	int i = p - 1;
+	for (int j = p; j < r; ++j)
 	{
-		int x = nums[r];
-		int i = p - 1;
-		for (int j = p; j < r; ++j)
+		if (nums[j] <= x)
 		{
-			if (nums[j] <= x)
-			{
-				swap(nums[++i], nums[j]);
-			}
+			swap(nums[++i], nums[j]);
 		}
-		swap(nums[++i], nums[r]);
-		return i;
 	}
+	swap(nums[++i], nums[r]);
+	return i;
+}
 
-    void quick_sort(vector<int> &nums, int p, int r)
+void quick_sort(vector<int> &nums, int p, int r)
+{
+	if (p < r)
 	{
-		if (p < r)
-		{
-			int q = partition(nums, p, r);
-			quick_sort(nums, p, q - 1); 
-			quick_sort(nums, q + 1, r);
-		}
+		int q = partition(nums, p, r);
+		quick_sort(nums, p, q - 1); 
+		quick_sort(nums, q + 1, r);
 	}
+}
 
 {% endhighlight %}
 
