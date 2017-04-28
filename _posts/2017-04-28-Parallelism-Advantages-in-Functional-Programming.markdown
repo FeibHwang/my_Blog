@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      ""
-subtitle:   "函数式编程的并行化优势"
+title:      "函数式编程的并行化优势"
+subtitle:   "函数式编程更加符合人的思维方式"
 date:       2017-04-28 17:00:00
 author:     "飞白"
 header-img: "img/post-bg-2015.jpg"
