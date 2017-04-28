@@ -98,3 +98,11 @@ qsort [] = []
 qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++ qsort (filter (>= x) xs)
 
 {% endhighlight %}
+
+Bang!就是这么简单!
+稍微解释一下：
+第一句表示如果传入一个空数组，那么就直接输出，这是coner case
+第二句描述了整个快排，filter是一个高阶函数，`filter (< x) xs`表示将数组xs中小于x的数保留，其他删除。
+
+可以看出Haskell版本的Quick Sort基本上就是第二种表述的翻版，这表示相比起C++的版本，Haskell版快排的可读性更加友好。更重要的是我们可以很快发现并行性：
+`qsort (filter (< x) xs)`, `[x]`与`qsort (filter (>= x) xs)`作为级联关系是可以并行的，不能并行的数组拆分与排序在代码中变成了函数嵌套，这是很重要的特性！在后面我会仔细解释。
