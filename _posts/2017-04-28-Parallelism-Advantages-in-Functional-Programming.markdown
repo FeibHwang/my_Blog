@@ -92,7 +92,7 @@ void quick_sort(vector<int> &nums, int p, int r)
 
 让我们看一下Haskell表示的快排：
 
-{% highlight haskell %}
+{% highlight hs %}
 
 qsort [] = []
 qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++ qsort (filter (>= x) xs)
