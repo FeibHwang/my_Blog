@@ -100,6 +100,7 @@ qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++ qsort (filter (>= x) xs)
 {% endhighlight %}
 
 Bang!就是这么简单!
+
 稍微解释一下：
 第一句表示如果传入一个空数组，那么就直接输出，这是coner case
 第二句描述了整个快排，filter是一个高阶函数，`filter (< x) xs`表示将数组xs中小于x的数保留，其他删除。
