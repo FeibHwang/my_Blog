@@ -75,3 +75,5 @@ if __name__ =='__main__':
 1. Lambda表达式与图灵机是两种数学模型，其中Lambda表达式已经证明是Turing Complete的，意味着Lambda表达式可以模拟图灵机的全部运算。
 2. 过程式编程(Sequencial Programming)与函数式编程(Functional Programming)是两种编程范式，分别源自于图灵机与Lambda表达式两种数学模型
 3. 编程语言： 不同的编程语言支持不同的编程范式，这也是有各种各样的编程语言的原因之一。过程式编程的代表语言有汇编，B, C；函数式编程的代表语言有Haskell, Scala, Lisp等。当然现代编程语言会支持多种编程范式，C++, Python, Javascript等就支持以上两种编程范式，但是它们又有不同的侧重，这里就不详谈了。
+
+另外，本文章将使用Haskell作为函数式编程实例语言，一方面是因为Haskell是纯函数式编程语言，其内部实现严格遵循了Lambda表达式的演算方式，另一方面作者认为Haskell是一门逼格很高的语言......嗯。
