@@ -57,9 +57,11 @@ void quick_sort(vector<int> &nums, int p, int r)
 
 ### 什么决定了算法并行性？
 * 数据依赖性(Data Dependency)
+
 从本质上来说，算法中的数据依赖性制约了并行化，快排中的两个子快排的对象是由`partition`函数产生的，因而必须等数组拆分完才能调用。另一个例子是归并排序(merge sort)，由于归并的必须是两个排好序的数组，所以归并排序的并行优化是“先并行，后顺序”。
 
 * 变量修改(Variable Modification)
+
 数据依赖性导致了算法并行极限。在代码中数据依赖体现在函数共享变量或内存地址，然而由于程序员的编程习惯，很多可以实现并行的算法由于共享变量等原因而无法并行执行，这导致了代码并行优化的复杂度提升。
 
 ### Sequencial Programming Parallelism常用技术与局限
