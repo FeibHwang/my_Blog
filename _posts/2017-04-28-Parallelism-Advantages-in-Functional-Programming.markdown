@@ -22,7 +22,7 @@ tags:
 
 先看一下经典的快速排序的C++实现：
 
-``` C++
+{% highlight c++ %}
 if __name__ =='__main__':
 	int partition(vector<int> &nums, int p, int r)
 	{
@@ -48,7 +48,7 @@ if __name__ =='__main__':
 			quick_sort(nums, q + 1, r);
 		}
 	}
-```
+{% endhighlight %}
 
 其中`quick_sort`函数中`partition`函数必须先执行，之后的两个`quick_sort`函数可以并行执行。快速排序的原理很简单：随机选择数组中一个数，将数组分成两部分，一部分所有元素小于等于该数，另一部分所有元素大于该数；对两个数组递归调用快速排序，之后将整个数组整合起来。
 
