@@ -174,3 +174,7 @@ int f3(int * x)
 大部分函数式编程采用最原始的数组为核心数据对象，当然函数式编程也是有自己的数据结构的，比如说Functional Programming领域中近似于“算法导论”存在的论文[Pure Functional Data Structures](https://www.cs.cmu.edu/~rwh/theses/okasaki.pdf)，建议所有对函数式编程感兴趣的人读一下。
 
 ### 优势二：类型抽象 Abstraction Hierarchy
+
+### 优势三：惰性求值 (Haskell 独有)
+
+### 优势四：Lambda演算的并行优势(以后有机会再写。。。)
