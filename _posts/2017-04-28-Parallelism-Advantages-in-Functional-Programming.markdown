@@ -65,7 +65,7 @@ void quick_sort(vector<int> &nums, int p, int r)
 ### Sequencial Programming Parallelism常用技术与局限
 为了解决数据依赖与共享内存缺陷，人们引入了Mutex, Semaphore, Locks, Synchronization等技术，使得过程式编程并行化变得十分复杂。很多介绍并行化编程的书有几乎一大半的篇幅被用于介绍同步，消息互锁等概念，由此可以看出并行化编程之复杂。
 
-![图灵机](http://3.bp.blogspot.com/-O8pU1eLknqg/Uf_2LlOsGWI/AAAAAAAAHoU/COz3NOtX-Q8/s200/turingmachine.gif)
+![图灵机](http://www.worldofcomputing.net/wp-content/uploads/2013/01/turingMachine.gif)
 
 从本质上讲，这种复杂性源自于过程式编程的数学模型：[图灵机](https://en.wikipedia.org/wiki/Turing_machine)，图灵机简单来说包括一个写着0-1字符的纸带与可以读取纸带的机器，这个机器可以读取，修改纸带上的字符，移动到纸带的任意位置，从而实现各种运算。从定义上来说，图灵机是顺序式执行的设备，机器必须根据当前读取到的字符进行下一步的执行，这种执行方式导致了Data Dependency十分明显。那么问题来了：是否有另外一种模型没有那么严重的Data Dependency Issue?
 
