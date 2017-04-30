@@ -22,8 +22,8 @@ kernel函数通过`__global__`声明标识，CUDA的线程数分配则通过一�
 
 {% highlight c %}
 
-// Kernel definition __global__ void 
-VecAdd(float* A, float* B, float* C) 
+// Kernel definition 
+__global__ void VecAdd(float* A, float* B, float* C) 
 { 
 	int i = threadIdx.x; 
 	C[i] = A[i] + B[i]; 
@@ -42,3 +42,33 @@ int main()
 # Thread Hierachy
 
 为了方便，`threadIdx`被写成了一个3维数组，这样线程可以被识别为1~3维的线程架构，称为`thread block`。这样就提供了一个有利于进行数值，数组，矩阵运算的抽象。
+
+线程的index与其ID通过一直十分直接的方式关联： 
+* 一维block: index == ID 两者相同
+* 二维block, size为(Dx,Dy): (x,y)的`thread ID` = x + y*Dx
+* 三维block, size为(Dx,Dy,Dz): (x,y,z)的`thread ID` = x + y*Dx + z*Dx*Dy
+
+Example: 两个NxN的矩阵乘法与存储
+
+{% highlight c %}
+
+// Kernel definition 
+__global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) 
+{ 
+	int i = threadIdx.x; 
+	int j = threadIdx.y; 
+	C[i][j] = A[i][j] + B[i][j]; 
+} 
+
+int main() 
+{ 
+	... 
+	// Kernel invocation with one block of N * N * 1 threads 
+	int numBlocks = 1; 
+	dim3 threadsPerBlock(N, N); 
+	MatAdd<<<numBlocks, threadsPerBlock>>>(A, B, C);
+	... 
+}
+
+
+{% endhighlight %}
