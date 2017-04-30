@@ -2,7 +2,7 @@
 layout:     post
 title:      "CUDA学习笔记（一）"
 subtitle:   "编程模型"
-date:       2017-04-28 17:00:00
+date:       2017-04-30 17:00:00
 author:     "飞白"
 header-img: "img/post-bg-2015.jpg"
 catalog: true
