@@ -126,3 +126,10 @@ Block中的线程通过共享内存空间实现线程通信，这就需要进行
 
 # Memory Hierachy
 
+![Memory Hierarchy](http://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/memory-hierarchy.png).
+
+上图展示了CUDA线程可访问的内存地址空间，每一个线程都有一个自己的私有内存空间。每一个Block又有一个自己的内存空间共自己的所有线程共享，其存在周期与Block自己一致。同时所有线程又共享一段全局内存空间(global memory).
+
+同时我们又有两个只读内存可供所有线程访问：Constant Memory与Texture Memory.两种内存对于不同的内存使用[策略](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses)进行了优化。Texture Memory同时提供了不同的地址访问方式，以及数据筛选。详细内容看[这里](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#texture-and-surface-memory)。
+
+对于同一个kernel或应用, 其全局内存，constant memory, texture memory是预先分配且确定的。
