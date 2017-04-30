@@ -115,3 +115,14 @@ int main()
 
 
 {% endhighlight %}
+
+注意，Block是被设计为可以独立的，意味着每一个Block是可以以任意顺序执行的，并行或顺序。进程调度程序会自动分配这些Block, 如下图所示：
+
+![Block Schedule](http://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/automatic-scalability.png).
+
+Block中的线程通过共享内存空间实现线程通信，这就需要进行线程同步。通过在kernel中调用`__syncthreads()`实现同步。`__syncthreads()`就像是一道屏障，当所有的线程都越过以后才会继续运行。共享内存的例子可以看[这里](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory).
+
+共享内存要求低延时（L1 cache）, `__syncthreads()`要求程序轻量执行。
+
+# Memory Hierachy
+
