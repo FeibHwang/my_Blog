@@ -23,6 +23,7 @@ kernel函数通过`__global__`声明标识，CUDA的线程数分配则通过一�
 {% highlight c %}
 
 // Kernel definition 
+
 __global__ void VecAdd(float* A, float* B, float* C) 
 { 
 	int i = threadIdx.x; 
@@ -48,11 +49,12 @@ int main()
 * 二维block, size为(Dx,Dy): (x,y)的`thread ID` = x + y*Dx
 * 三维block, size为(Dx,Dy,Dz): (x,y,z)的`thread ID` = x + y*Dx + z*Dx*Dy
 
-Example: 两个NxN的矩阵乘法与存储
+Example: 两个NxN的矩阵加法与存储
 
 {% highlight c %}
 
 // Kernel definition 
+
 __global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) 
 { 
 	int i = threadIdx.x; 
@@ -68,6 +70,47 @@ int main()
 	dim3 threadsPerBlock(N, N); 
 	MatAdd<<<numBlocks, threadsPerBlock>>>(A, B, C);
 	... 
+}
+
+
+{% endhighlight %}
+
+每一个`block`的大小是有限制的，因为block中所有线程理论上是共享处理器与内存的，现在的GPU中，一个block的内存数为1024.
+
+由于一个kernel中可能有多个相同维度的block,因此kernel的总线程数等于block数乘以每个block中的线程数。
+
+同时，`Block`也被划分为1~3维的`grid`，如下图所示
+
+![Grid-Block](http://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/grid-of-thread-blocks.png)
+
+一个Grid中的Block数取决于问题的数据复杂度，是可以改变的。
+
+`Block`中的线程数与`Grid`中的Block数都是通过`<<<...>>>`语法定义的`int`或`dim3`声明的。上图声明了一个2-D的Block或Grid.
+
+Block在Grid中的Index通过`blockIdx`变量获取，Block的线程维度通过`blockDim`获取。
+
+现在通过扩展之前的`MatAdd()`例子，我们可以处理多个Block:
+
+{% highlight c %}
+
+// Kernel definition 
+
+__global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) 
+{ 
+	int i = blockIdx.x * blockDim.x + threadIdx.x; 
+	int j = blockIdx.y * blockDim.y + threadIdx.y; 
+	if (i < N && j < N) C[i][j] = A[i][j] + B[i][j]; 
+} 
+
+int main() 
+{ 
+	... 
+	// Kernel invocation 
+
+	dim3 threadsPerBlock(16, 16); 
+	dim3 numBlocks(N / threadsPerBlock.x, N / threadsPerBlock.y); 
+	MatAdd<<<numBlocks, threadsPerBlock>>>(A, B, C); 
+	...
 }
 
 
