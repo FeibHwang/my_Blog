@@ -22,7 +22,8 @@ kernel函数通过`__global__`声明标识，CUDA的线程数分配则通过一�
 
 {% highlight c %}
 
-// Kernel definition __global__ void VecAdd(float* A, float* B, float* C) 
+// Kernel definition __global__ void 
+VecAdd(float* A, float* B, float* C) 
 { 
 	int i = threadIdx.x; 
 	C[i] = A[i] + B[i]; 
