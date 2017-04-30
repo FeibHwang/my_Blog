@@ -38,3 +38,7 @@ int main()
 }
 
 {% endhighlight %}
+
+# Thread Hierachy
+
+为了方便，`threadIdx`被写成了一个3维数组，这样线程可以被识别为1~3维的线程架构，称为`thread block`。这样就提供了一个有利于进行数值，数组，矩阵运算的抽象。
