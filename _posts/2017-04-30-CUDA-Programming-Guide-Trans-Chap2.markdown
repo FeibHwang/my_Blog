@@ -12,7 +12,9 @@ tags:
     - 翻译
 ---
 
-# Kernels
+NVIDIA CUDA TOOLKIT DOCUMENTATION [第二章](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-model)笔记/翻译
+
+# [Kernels](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#kernels)
 
 `kernels`是CUDA C对C的延伸内容之一，当kernel函数被调用时，它会在N个CUDA线程中执行N次。
 
@@ -40,7 +42,7 @@ int main()
 
 {% endhighlight %}
 
-# Thread Hierachy
+# [Thread Hierachy](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#thread-hierarchy)
 
 为了方便，`threadIdx`被写成了一个3维数组，这样线程可以被识别为1~3维的线程架构，称为`thread block`。这样就提供了一个有利于进行数值，数组，矩阵运算的抽象。
 
@@ -124,7 +126,7 @@ Block中的线程通过共享内存空间实现线程通信，这就需要进行
 
 共享内存要求低延时（L1 cache）, `__syncthreads()`要求程序轻量执行。
 
-# Memory Hierachy
+# [Memory Hierachy](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy)
 
 ![Memory Hierarchy](http://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/memory-hierarchy.png).
 
@@ -133,3 +135,25 @@ Block中的线程通过共享内存空间实现线程通信，这就需要进行
 同时我们又有两个只读内存可供所有线程访问：Constant Memory与Texture Memory.两种内存对于不同的内存使用[策略](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses)进行了优化。Texture Memory同时提供了不同的地址访问方式，以及数据筛选。详细内容看[这里](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#texture-and-surface-memory)。
 
 对于同一个kernel或应用, 其全局内存，constant memory, texture memory是预先分配且确定的。
+
+# [Heterogeneous Programming](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#heterogeneous-programming)
+
+![Heterogeneous Programming](http://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/heterogeneous-programming.png).
+
+如上图所示，CUDA编程模型假设CUDA线程是运行在一个协处理器中的，这个协处理器是与一个运行C主程序的处理器分离的。对应于电脑中CPU与GPU的分离。
+
+CUDA编程模型同时还假设主设备与协处理器有其自己的DRAM, 分别称为`host memory`和`device memory`.因此，一个程序通过kernel调用控制着global,constant,texture memory的访问权限（不太确定本意），这部分内收收录在[这里](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-interface)。这包括了设备内存管理与host/devise设备切换。
+
+# [Compute Capability](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability)
+
+一个设备(device)的版本号(version number)表示了这个设备的计算性能(compute capability), 有时版本号又称`SM version`.这个版本号指明了GPU硬件所支持的功能，程序在执行时可以获取这个号码已确定哪些指令是可以使用的。
+
+版本号由一个主版本号X和一个副版本号Y组成，设备的主版本号X相同意味着两者的`core architecture`是一样的： 
+* 5： 核心基于Maxwell架构
+* 3： 核心基于Kepler架构
+* 2： 核心基于Fermi架构
+* 1： 核心基于Tesla架构
+
+设备的副版本号表示核心架构的增强版本，意味着一些新的feature的加入
+
+详细的版本号在NVIDA官网查询到：[CUDA-Enabled GPUs](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#cuda-enabled-gpus),[Compute Capabilities](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capabilities).
