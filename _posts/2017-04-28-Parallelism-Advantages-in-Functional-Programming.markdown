@@ -175,6 +175,8 @@ int f3(int * x)
 
 ### 优势二：类型抽象 Abstraction Hierarchy
 
+Haskell强大的类型抽象从一定程度上剥离了算法问题的关联性，其中的`typeclass`,	`functor`,`applicative`,`monad`一步一步提高了问题的抽象，同时也削弱的Data Dependency的问题，首先推荐一下国外大神的文章，[Functors, Applicatives, And Monads In Pictures](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html)，文章通过漫画生动地展示了它们的关系，我准备将这一篇文章翻译一遍。
+
 ### 优势三：惰性求值 (Haskell 独有)
 
-### 优势四：Lambda演算的并行优势(以后有机会再写。。。)
+### 优势四：Lambda演算的并行优势(以后有机会再写。。。) 
