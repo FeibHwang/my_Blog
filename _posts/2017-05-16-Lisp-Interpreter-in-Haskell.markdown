@@ -83,3 +83,19 @@ myList._value.add(new BlaiseInt(2));
 myList._value.add(new BlaiseInt(3));
 
 {% endhighlight %}
+
+虽然我们我你也可以用4行实现上述功能，但一行的Haskell实现也更加清晰：你可以使用Haskell实现更短，易读且扩展性良好的程序。
+
+# 打印
+
+之前一节我们实现了一个数据结构来承载Lisp的抽象语法书。还有一个所有Lisp解释器都应该具有的功能，打印数据结构。Haskell使用一个多态类型的`show`函数实现打印，对应着Java中的`toString`。`show`函数默认的会基于数据输入时的样子打印出数据（着使得`show`具有了比`toString`更强大的功能，但我们暂时不会涉及这些）。这两种实现对于我们的要求并不是十分有用，因为我们需要解释器通过`s表达式`打印数据结构。因此，我们必须自己实现这一功能：
+
+{% highlight hs %}
+
+instance Show Expr where
+        show (BlaiseInt x) = show x
+        show (BlaiseSymbol x) = x
+        show (BlaiseFn x) = "<function>"
+        show (BlaiseList x) = "(" ++ unwords (map show x) ++ ")"
+
+{% endhighlight %}
