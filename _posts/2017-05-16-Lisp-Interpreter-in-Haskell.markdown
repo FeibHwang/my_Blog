@@ -26,7 +26,7 @@ tags:
 
 # 抽象语法树
 
-实现解释器的第一步是确定解析边界。我决定紧紧处理整数，符号，函数以及列表，这些元素组成了Lisp的最小子集。之后我需要将这些idea转换成Haskell代码，这与使用任何语言实现的过程一样。同时Haskell的优势立马显示了出来。通过Haskell我仅仅需要4行代码来实现所需要的数据结构！我使用Haskell定义了一个算数数据的数据格式：
+实现解释器的第一步是确定解析边界。我决定紧紧处理整数，符号，函数以及列表，这些元素组成了Lisp的最小子集。之后我需要将这些idea转换成Haskell代码，这与使用任何语言实现的过程一样。同时Haskell的优势立马显示了出来。通过Haskell我仅仅需要4行代码来实现所需要的数据结构！我使用Haskell定义了一个代数数据(Algebraic Data Type)的数据格式：
 
 {% highlight hs %}
 
@@ -34,5 +34,52 @@ data Expr = BlaiseInt Integer |
             BlaiseSymbol String |
             BlaiseFn ([Expr]->Expr) |
             BlaiseList [Expr]
+
+{% endhighlight %}
+
+这个代数数据类型简直就像黑膜法。因为它们与我们平常的编程方式有所区别，这造成了初学者的困惑，而且往往会伴随初学者很久直到我们从直觉上理解它。上面的代码仅仅表述了一个`Expr`可能是一个整数，一个符号，一个函数或一个列表，同时每一个元素包含了一个单成员域(single member field)，分别是一个整数，一个string，一个接收表达式列表并返回一个表达式的函数，一个表达式列表。如果我们用Java表示上面的定义可能是这样：
+
+{% highlight java %}
+
+abstract class Expr {}
+
+final class BlaiseInt extends Expr {
+    public int _value;
+}
+
+final class BlaiseSymbol extends Expr {
+    public String _value;
+}
+
+interface BlaiseFunction {
+    public Expr evaluateFunction(List arguments);
+}
+
+final class BlaiseFn extends Expr {
+    BlaiseFunction _value;
+}
+
+final class BlaiseList extends Expr {
+    List _value;
+}
+
+{% endhighlight %}
+
+我们可以看出Java实现相比于Haskell要更长，尽管我已经尽量简化并省略了构造函数以及共享变量等方法。除此以外，当我们继续扩展这个解释器时，为Java版本的实现将会变得十分困难。我会在这篇文章中试图解释这些点。我可以立刻举出的例子是数据结构实例化。比如，我准备实现一个带有3个整数的列表，在Haskell中我可以这样实现：
+
+{% highlight hs %}
+
+myList = BlaiseList [BlaiseInt 1, BlaiseInt 2, BlaiseInt 3]
+
+{% endhighlight %}
+
+而在Java中会这样实现：
+
+{% highlight java %}
+
+BlaiseList myList = new BlaiseList();
+myList._value.add(new BlaiseInt(1));
+myList._value.add(new BlaiseInt(2));
+myList._value.add(new BlaiseInt(3));
 
 {% endhighlight %}
