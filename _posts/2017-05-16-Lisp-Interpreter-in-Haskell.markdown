@@ -26,3 +26,13 @@ tags:
 
 # 抽象语法树
 
+实现解释器的第一步是确定解析边界。我决定紧紧处理整数，符号，函数以及列表，这些元素组成了Lisp的最小子集。之后我需要将这些idea转换成Haskell代码，这与使用任何语言实现的过程一样。同时Haskell的优势立马显示了出来。通过Haskell我仅仅需要4行代码来实现所需要的数据结构！我使用Haskell定义了一个算数数据的数据格式：
+
+{% highlight hs %}
+
+data Expr = BlaiseInt Integer |
+            BlaiseSymbol String |
+            BlaiseFn ([Expr]->Expr) |
+            BlaiseList [Expr]
+
+{% endhighlight %}
