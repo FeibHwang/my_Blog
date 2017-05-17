@@ -99,3 +99,5 @@ instance Show Expr where
         show (BlaiseList x) = "(" ++ unwords (map show x) ++ ")"
 
 {% endhighlight %}
+
+不要被上面的`instace`所迷惑，上面的代码与面向对象程序中的实例无关。上述代码向Haskell表明为`Expr`数据实现了一个打印的方法“实现”。这样当任何人对我们的数据结构调用`show`函数后，就可以打印出s表达式
