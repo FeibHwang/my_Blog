@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "复杂的C/C++ 变量声明读取"
+title:      "复杂C/C++ 变量声明读取"
 subtitle:   "识别复杂C/C++变量的基本步骤"
 date:       2017-05-05 07:00:00
 author:     "飞白"
