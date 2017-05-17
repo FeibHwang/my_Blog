@@ -100,4 +100,24 @@ instance Show Expr where
 
 {% endhighlight %}
 
-不要被上面的`instace`所迷惑，上面的代码与面向对象程序中的实例无关。上述代码向Haskell表明为`Expr`数据实现了一个打印的方法“实现”。这样当任何人对我们的数据结构调用`show`函数后，就可以打印出s表达式
+不要被上面的`instace`所迷惑，上面的代码与面向对象程序中的实例无关。上述代码向Haskell表明为`Expr`数据实现了一个打印的方法“实现”。这样当任何人对我们的数据结构调用`show`函数后，就可以打印出s表达式。上面的代码应用了模式匹配————`show`函数被实现了4次。当`show`被调用时，Haskell运行环境会检测有效的数据类型，并调用对应的`show`函数实现。着与Java中的虚函数的概念很像但更加强大。在Java中我们可以定义4种`toString`函数并在运行时进行匹配。但是，Haskell的类型匹配可以同时匹配不仅仅是数据类型————它还可以匹配值，bool表达式，特殊数据结构等。这一特性的巨大优越性会在之后体现出来。现在，我们使用Java实现`toString`的列表打印：
+
+{% highlight java %}
+
+String toString() {
+    StringBuffer output("(");
+    Iterator it = _value.iterator();
+    if(it.hasNext()) {
+        Expr value = (Expr) it.next();
+	output.append(value.toString());
+    }
+    for (; it.hasNext(); ) {
+	output.append(" ");
+        Expr value = (Expr) it.next();
+	output.append(value.toString());
+    }
+
+    output.append(")");
+    return output.toString();
+
+{% endhighlight %}
