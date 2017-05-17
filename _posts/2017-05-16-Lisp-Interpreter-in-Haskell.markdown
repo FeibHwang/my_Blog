@@ -140,3 +140,31 @@ parseSymbol = do f <- firstAllowed
 {% endhighlight %}
 
 代码的描述能力很强。它先寻找第一个合法字符(一般不是数字)，然后是很多同类型字符或数字。你可以在源代码中找到其他部分的定义。这个例子展示了领域特定语言是如何避免了使用多余的工具，多余的编译链接步骤等没必要的工作。Haskell是领域特定语言极佳的承载器。警告：学习完`Parsec`在学习`JavaCC`会十分痛苦。
+
+# 求值
+
+现在我们到了解释器的核心——Lisp表达式求值。这一部分使用了Haskell的几项特性：类型推导(包括可选类型声明)，模式匹配，代数类型特性，函数第一成员，高阶函数等。让我们从以下代码片段中分别体会这一系列性质：
+
+{% highlight hs %}
+
+eval :: Expr -> Expr
+eval (BlaiseInt n) = BlaiseInt n
+eval (BlaiseSymbol s) = ctx Map.! s
+eval (BlaiseFn f) = BlaiseFn f
+eval (BlaiseList (x:xs)) = apply (eval x) (map eval xs)
+        where apply :: Expr -> [Expr] -> Expr
+              apply (BlaiseFn f) args = f args
+
+{% endhighlight %}
+
+这段代码定义了一个函数`eval`，用于解析Lisp表达式。如果你不熟悉Haskell的话这段代码可能会比较费解，但你只需学习一些Haskell的强大特性就可以解读。我们先从类型推导开始。
+
+第一行是`类型声明`，我们告诉编译器`eval`函数接受一个表达式并返回另一个表达式。注意到声明与函数的剩余部分是分开的。在外行眼中Haskell好象是动态类型语言但其实不是——一切都在编译阶段确定了。Haskell通过类型接口实现静态编译而且它实现得非常好。大部分时候你不需要声明格式——Haskell会自己推导出来。有时编译器会陷入混淆因此你需要添加类型声明——但这只是例外而非必须。如果你不清楚某个对象的类型，你可以通过解释器命令行输入`:t something`来打印对象的类型。大部分类型声明是没有必要的，我添加只是为了更清楚。当你熟悉了这一套类型接口之后就很难再写出下面这种Java代码了：
+
+{% highlight java %}
+
+ReallyLongClassName i = (ReallyLongClassName)foo.getBar();
+
+{% endhighlight %}
+
+下面一行是一系列模式匹配的开端。这一特性可以看作是一种基于动态数据结构的虚函数以及正则表达式的混合，或者是一种基于大型声明跳转的抽象。4行模式匹配决定了`eval`函数对于4种类型的执行策略。例如，第二行说：“如果第一个元素是一个整数，就返回自己”。
