@@ -121,3 +121,22 @@ String toString() {
     return output.toString();
 
 {% endhighlight %}
+
+然而Haskell的一行实现黑膜法变成了Java的16行代码。尽管这个例子不能说明什么，但一旦你一遍又一遍地遇到这些，你就可以看到一个有趣的图景展现在你的眼前>_<
+
+# 语法解析
+
+我们现在可以建立一个Haskell数据结构来表示Lisp的抽象语法树并将其打印下来。下一步就是实现一个语法解析模块(Parser)将Lisp那坑爹的括号架构转换为我们自己的数据结构。实现Lisp解释器的优点是它的Parser非常好实现————大部分时候我们可以不借助于高级的parse工具直接徒手实现。这种方式有其优越性(不需要另外编译代码，不需要学习使用这些工具，debug也是十分容易的)，相比于Java或C实现。一开始使用Haskell实现这个parser也是经过了同样的步骤————不借助工具徒手实现。然而，很快我意识到Haskell的不同并不能很好的与其他语言实现方式结合起来。
+
+Haskell带有一个标准的语法解析库`Parsec`，它实现了一个领域特定(domain specific)语言作为解析语言。如果你熟悉C++ Boost [Spirit](http://www.defmacro.org/web/20161118010028/http://spirit.sourceforge.net/)库你应该知道我说的是什么。这个库内嵌了一门语法解析语言。人们可以使用这个库直接确定parser的语法！`Parsec`库需要一些时间来掌握，但一旦你学会了你就可以永远丢掉以往的parser生成方法了。为了展示`Parsec`的语法，以下代码片段可以解析一个符号：
+
+{% highlight hs %}
+
+parseSymbol = do f <- firstAllowed
+                 r <- many (firstAllowed <|> digit)
+                 return $ BlaiseSymbol (f:r)
+        where firstAllowed = oneOf "+-*/" <|> letter
+
+{% endhighlight %}
+
+代码的描述能力很强。它先寻找第一个合法字符(一般不是数字)，然后是很多同类型字符或数字。你可以在源代码中找到其他部分的定义。这个例子展示了领域特定语言是如何避免了使用多余的工具，多余的编译链接步骤等没必要的工作。Haskell是领域特定语言极佳的承载器。警告：学习完`Parsec`在学习`JavaCC`会十分痛苦。
