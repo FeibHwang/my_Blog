@@ -208,3 +208,26 @@ ctx = Map.fromList [("*", BlaiseFn blaiseMul)]
 
 这就像一个Lisp格式的计算器，而不是一个解释器。构建解释器的下一步自然就是定义变量了。鉴于Haskell原则上不允许可变数据结构(mutable data)同时又由于我们的设计仅仅限于4个元素(整数，符号，函数与列表)，我们需要处理一些问题。
 
+第一个问题最显而易见： 既然Haskell不支持变量，我们如何通过它实现支持变量的Lisp解释器? 我们不能通过声明一个全局的map进行符号映射与修改——所有的Haskell变量仅仅可以写入`一次`。为了解决这个问题我们不得不修改我们的设计：`eval`函数需要接收解释器的当前状态(即当前的符号列表)并更新新的状态以及解析过的表达式。此外我们需要修改我们的`Expr`数据类型因为函数的功能包括修改符号表。最后的代码会像下面这样：
+
+{% highlight hs %}
+
+type Context = Map.Map String Expr
+
+data Expr = BlaiseInt Integer |
+        BlaiseSymbol String |
+        BlaiseFn (Context->[Expr]->(Context, Expr)) |
+        BlaiseList [Expr]
+
+eval :: Context -> Expr -> (Context, Expr)
+eval ctx (BlaiseInt n) = (ctx, BlaiseInt n)
+
+{% endhighlight %}
+
+现在我们的解释器可以处理状态了！然而，我们仍然无法处理赋值，原因比较微妙，看一下下面这行代码：
+
+{% highlight lisp %}
+
+(set i 5)
+
+{% endhighlight %}
