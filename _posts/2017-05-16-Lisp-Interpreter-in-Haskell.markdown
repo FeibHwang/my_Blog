@@ -232,4 +232,55 @@ eval ctx (BlaiseInt n) = (ctx, BlaiseInt n)
 
 {% endhighlight %}
 
-如果我们试图将`set`实现为一个函数我们的解释器就会崩溃！原因很简单——我们的代码在接受参数的时候会将它们全部解析。在上面的例子中，我们的解释器会试图解析符号i, 但由于i本是不存在于世会出现错误。因此函数并不是实现类似功能的好方法。
+如果我们试图将`set`实现为一个函数我们的解释器就会崩溃！原因很简单——我们的代码在接受参数的时候会将它们全部解析。在上面的例子中，我们的解释器会试图解析符号i, 但由于i本是不存在于世会出现错误。因此函数并不是实现类似功能的好方法。我们需要修改我们的`Expr`数据格式并引入一种新的函数来进行解析。这样我们的`set函数`实现才会只解析第二个参数而留下第一个。Lisp一般通过某些特殊形式调取这些函数，因此我们的`Expr`可以定义为：
+
+{% highlight hs %}
+
+data Expr = BlaiseInt Integer |
+        BlaiseSymbol String |
+        BlaiseFn (Context->[Expr]->(Context, Expr)) |
+        BlaiseSpecial (Context->[Expr]->(Context, Expr)) |
+        BlaiseList [Expr]
+
+{% endhighlight %}
+
+最后一件工作是修改我们的`eval`函数，使其可以区别对待普通函数与特殊函数。与之前一样，我们可以通过模式匹配实现这一功能：
+
+{% highlight hs %}
+
+eval ctx (BlaiseList (x:xs)) =
+        let (new_ctx, fn) = (eval ctx x)
+            (last_ctx, eval_args) = mapAccumL eval new_ctx xs
+            apply (BlaiseFn f) = f last_ctx eval_args
+            apply (BlaiseSpecial f) = f new_ctx xs
+        in apply fn
+
+{% endhighlight %}
+
+我们现在可以实现真正的赋值操作了。真正实现起来我们只需要3行代码：
+
+{% highlight hs %}
+
+blaiseSet ctx [(BlaiseSymbol s), e] =
+        (Map.insert s eval_e new_ctx, eval_e)
+            where (new_ctx, eval_e) = eval ctx e
+
+{% endhighlight %}
+
+完成！！！现在我们可以进行赋值操作并把变量应用于表达式了：
+
+{% highlight lisp %}
+
+(set i 5)
+(+ i 1)
+(set j (+ i 5))
+(set j (+ j 1))
+
+{% endhighlight %}
+
+尽管这种改进花了我们很多文字去描述，真正的代码修改却十分少量。从中我们可以体会到Haskell的代码维护优越性——这里没有需要重定义的类，没有太多需要追中的依赖关系，而且更重要的是，我们不需要关心隐式的状态。haskell的类型系统让我们在编译期就能发现大部分修改代码引入的类型错误。我们同时不用担心打乱程序调用顺序或打乱成员状态的潜在危险——所有的状态是由我们自己管理的，所有的类型检测交由Haskell来管理。在接下来的两章的代码实现中我们更能体会到Haskell的代码维护优势。
+
+# 使用Monads进行代码重构
+
+
+
