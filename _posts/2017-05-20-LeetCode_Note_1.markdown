@@ -4,7 +4,7 @@ title:      "LeetCode 刷题笔记： 1.Two Sum"
 subtitle:   "C++笔记"
 date:       2017-05-20 12:00:00
 author:     "飞白"
-header-img: "img/post-bg-2015.jpg"
+header-img: "post_leetcode.jpg"
 catalog: true
 tags:
     - C++
