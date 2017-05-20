@@ -11,6 +11,8 @@ tags:
     - LeetCode
 ---
 
+# Introduction
+
 Given an array of integers, return `indices` of the two numbers such that they add up to a specific target.
 
 You may assume that each input would have `exactly` one solution, and you may not use the same element twice.
@@ -26,7 +28,7 @@ return [0, 1].
 
 {% endhighlight %}
 
-Solution 1: hash map
+# Solution 1: hash map
 
 Using hash map for the solution, record the needed value and the index pair.
 
