@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "LeetCode 刷题笔记： 2.Add Two Numbers"
-subtitle:   "C++笔记"
+title:      "LeetCode 刷题笔记"
+subtitle:   "2.Add Two Numbers"
 date:       2017-05-26 13:00:00
 author:     "飞白"
 header-img: "img/post-bg-leetcode.jpg"

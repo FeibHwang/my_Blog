@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "LeetCode 刷题笔记： 3.Longest Substring Without Repeating Characters"
-subtitle:   "C++笔记"
+title:      "LeetCode 刷题笔记"
+subtitle:   "3.Longest Substring Without Repeating Characters"
 date:       2017-05-26 14:00:00
 author:     "飞白"
 header-img: "img/post-bg-leetcode.jpg"

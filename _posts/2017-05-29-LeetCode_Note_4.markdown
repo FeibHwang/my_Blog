@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "LeetCode 刷题笔记： 4.Longest Substring Without Repeating Characters"
-subtitle:   "C++笔记"
+title:      "LeetCode 刷题笔记"
+subtitle:   "4.Longest Substring Without Repeating Characters"
 date:       2017-05-29 14:00:00
 author:     "飞白"
 header-img: "img/post-bg-leetcode.jpg"
@@ -26,7 +26,7 @@ nums2 = [3, 4]
 
 The median is (2 + 3)/2 = 2.5
 
-Solution 1: Binary Search
+# Solution 1: Binary Search
 
 The idea is simple but the real code is hard to make it right
 
@@ -58,7 +58,7 @@ use `ia` record min(k/2,m), `ib` record k - ia
 
 Code:
 
- {% highlight c++ %}
+{% highlight c++ %}
 
 double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int l1 = nums1.size();
