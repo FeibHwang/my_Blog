@@ -282,7 +282,53 @@ blaiseSet ctx [(BlaiseSymbol s), e] =
 
 # 使用Monads进行代码重构
 
+之前一章可能让Java程序员和Haskell程序员同时蒙逼。我们必须要越过状态吗？答案即是是又是不是。事实上这种“对程序的每一个可能状态进行格式化”的必要性是一件好事——它实际上是让我们的程序减少了数据依赖同时增强了多态性，进而增强了程序的鲁棒性。真正的问题是在每一个函数需要时进行状态输出，这就需要花当量时间进行重复的工作，进而导致模板文件的产生。
 
+幸运的是Haskell可以通过一种叫Monad的东西帮助我们避免这些麻烦。我不会在这篇文章里详细介绍Monad，如果你有兴趣网上有很多关于Monad的讲解。Monad的原理其实十分简单——Monad通过一种对Haskell类型系统重定义的方式来让我们对对模板代码进行抽象。例如，我们可以定义一个“状态”Monad来处理状态转换，进而我们可以把注意力放在更重要的地方。
 
+我们可以使用`状态Monad`来对我们的解释器进行之前代码的状态清理。首先我们需要清理我们之前声明的状态传递：
 
+{% highlight hs %}
+
+data Expr = BlaiseInt Integer |
+        BlaiseSymbol String |
+        BlaiseFn ([Expr]->BlaiseResult) |
+        BlaiseSpecial ([Expr]->BlaiseResult) |
+        BlaiseList [Expr]
+
+eval :: Expr -> BlaiseResult
+
+{% endhighlight %}
+
+我们通过`StateT`monad来定义`BlaisResult`进而处理IO：
+
+{% highlight hs %}
+
+type BlaiseResult = StateT Context IO Expr
+
+{% endhighlight %}
+
+现在我们就可以借用Monad重构我们的代码并避免状态转入的麻烦。`StateT`Monad事实上帮我们对这些麻烦事进行了抽象——我们只需对代码中的状态进行重构。当这个Monad被实现后，对其进行转入的代码只需写一次(`StateT`事实上是Haskell的标准Monad)。
+
+{% highlight hs %}
+
+blaiseSet [(BlaiseSymbol s), e] =
+        do eval_e <- eval e
+           modify (\sym_table->Map.insert s eval_e sym_table)
+           return eval_e
+
+eval (BlaiseInt n) = return (BlaiseInt n)
+eval (BlaiseList (x:xs)) = do fn <- eval x
+                              apply fn
+    where apply (BlaiseSpecial f) = f xs
+          apply (BlaiseFn f) = do args <- mapM eval xs
+                                  f args
+
+{% endhighlight %}
+
+很多初学者都有一种误解，认为`Monads`是Haskell作为一种惰性(Lazy),无副作用的语言在处理求值运算时的让步。尽管Monad被用于处理IO, 这只是它的一种用法。当我在逐渐探询Haskell的本质时，我渐渐意识到Monad是程序员构建高级抽象的强有力工具。 Monads和高阶方程一起为我们提供了一种比模板更为强大的抽象。从这个角度看Monads与Lisp的Macro很像(尽管它们的本质很不一样)，相比较而言像Java这种语言通过冗长的类型来实现高阶方程完全缺少一种灵活的可选择性。很多语言特性(异常，接续等)都可以通过Monads或Macros实现。对于其他语言这些特性是否支持完全取决于编译器的开发人员——如果Sun不决定让Java支持接续特性我们就永远无法通过Java实现。
+
+# 错误处理
+
+Monads最引人入胜的语法特性可能就是`组合`了，这一特性让我们可以根据不同的目的混合，匹配不同的Monads来实现良好构建，可扩展的设计。
 
