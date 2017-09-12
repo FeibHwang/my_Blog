@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Ubuntu+CUDA Installation Guide"
-subtitle:   "7. Reverse Integer"
+subtitle:   "A basic memo when I install CUDA8.0 on my Ubuntu"
 date:       2017-09-12 22:00:00
 author:     "飞白"
 header-img: "img/post-bg-2015.jpg"
@@ -61,3 +61,43 @@ options nouveau modeset=0
 Then run: `$ sudo update-initramfs –u`
 Finally use command `$ lsmod | grep nouveau` again, if no output then you can proceed
 
+2. Text Mode Installation
+Reboot your computer, when you enter login, use `alt+ctrl+F1` to enter text mode, then log in.
+
+run `$ sudo service lightdm stop` to close GUI interface
+
+run `sudo init 3`
+
+go to your runfile location, run `$ sudo sh cuda_<your_version>_linux.run --override`
+
+Follow the option, be sure to choose `no` when asking whether to install OpenGL if you have dual graphics card
+
+After Installation, restart lightdm again by running `$ sudo service lightdm start`
+
+Reboot
+
+Env Setting: `$ sudo gedit /etc/profile`, add following content at end of the profile:
+{% highlight %}
+export PATH=/usr/local/cuda-8.0/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+{% endhighlight %}
+
+The installation part has finished
+
+# Post Check
+run `$ cat /proc/driver/nvidia/version` to print NVIDIA Driver version
+
+run `$ nvcc –V` to print CUDA version
+
+Try to compile CUDA Example
+change location to ~/NVIDIA_CUDA-8.0_Samples
+run `$ make`
+
+Run CUDA program
+change location to ~/NVIDIA_CUDA-8.0_Samples/bin
+run `$ sudo ./deviceQuery` to print GPU info
+
+It is possible you get error like “cuda driver version is insufficient for cuda runtime”, this is possibally because your CUDA version and Driver version are not compatiable, use the following command:
+run `sudo apt-get purge nvidia*`
+run `sudo apt-get install nvidia-current`
+run `sudo reboot`
