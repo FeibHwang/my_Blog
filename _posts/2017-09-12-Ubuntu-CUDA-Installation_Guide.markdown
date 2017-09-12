@@ -4,7 +4,7 @@ title:      "Ubuntu+CUDA Installation Guide"
 subtitle:   "7. Reverse Integer"
 date:       2017-09-12 22:00:00
 author:     "飞白"
-header-img: "img/post-bg-leetcode.jpg"
+header-img: "img/post-bg-2015.jpg"
 catalog: true
 tags:
     - Ubuntu
@@ -50,3 +50,11 @@ There are several methods to install CUDA, I really recommand using runfile
 Download the runfile at [Here](https://developer.nvidia.com/cuda-downloads)
 
 #runfile installation
+1. Disable nouveau
+run command: `$ lsmod | grep nouveau` if something show up, then nouveau is currently loading
+To disable it:
+Creat file named `blacklist-nouveau.conf` under `/etc/modprobe.d`, adding following content
+{% highlight %}
+blacklist nouveau
+options nouveau modeset=0
+{% endhighlight %}
