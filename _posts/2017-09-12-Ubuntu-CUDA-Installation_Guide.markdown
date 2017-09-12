@@ -14,21 +14,21 @@ tags:
 
 Here are the basic step of installing the CUDA-8.0 driver and toolkit on Ubuntu 16.04
 
-My Device: DELL XPS 15 9550
-OS: Windows 10 Home + Ubuntu 16.04
-Graphics: GTX 960M + Intel HD something
+My Device: DELL XPS 15 9550 
+OS: Windows 10 Home + Ubuntu 16.04 
+Graphics: GTX 960M + Intel HD something 
 CUDA Version: 8.0
 
 P.S: when your computer has dual graphics card installed like me and you are using non-NVIDIA card for display, DO NOT INSTALL `openGL Library` when you install CUDA
 
 
 
-#First Thing First
+# First Thing First
 PLEASE PLEASE read the official [CUDA installation guide](http://developer.download.nvidia.com/compute/cuda/7.5/Prod/docs/sidebar/CUDA_Installation_Guide_Linux.pdf)
 Check every details including the system requirements and installation status
 
 
-#GPU requirement Check
+# GPU requirement Check
 
 1.CUDA-capable check
 Use command: 
@@ -45,11 +45,11 @@ Use command:
 `$ sudo apt-get install linux-headers-$(uname -r)`
 to install the correct kernel header
 
-#Choose instalation methods
+# Choose instalation methods
 There are several methods to install CUDA, I really recommand using runfile
 Download the runfile at [Here](https://developer.nvidia.com/cuda-downloads)
 
-#runfile installation
+# runfile installation
 1. Disable nouveau
 run command: `$ lsmod | grep nouveau` if something show up, then nouveau is currently loading
 To disable it:
@@ -58,3 +58,6 @@ Creat file named `blacklist-nouveau.conf` under `/etc/modprobe.d`, adding follow
 blacklist nouveau
 options nouveau modeset=0
 {% endhighlight %}
+Then run: `$ sudo update-initramfs –u`
+Finally use command `$ lsmod | grep nouveau` again, if no output then you can proceed
+
