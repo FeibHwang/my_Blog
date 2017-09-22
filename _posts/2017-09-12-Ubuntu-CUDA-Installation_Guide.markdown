@@ -54,10 +54,10 @@ Download the runfile at [Here](https://developer.nvidia.com/cuda-downloads)
 run command: `$ lsmod | grep nouveau` if something show up, then nouveau is currently loading
 To disable it:
 Creat file named `blacklist-nouveau.conf` under `/etc/modprobe.d`, adding following content
-{% highlight %}
+
 blacklist nouveau
 options nouveau modeset=0
-{% endhighlight %}
+
 Then run: `$ sudo update-initramfs –u`
 Finally use command `$ lsmod | grep nouveau` again, if no output then you can proceed
 
