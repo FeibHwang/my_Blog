@@ -77,10 +77,10 @@ After Installation, restart lightdm again by running `$ sudo service lightdm sta
 Reboot
 
 Env Setting: `$ sudo gedit /etc/profile`, add following content at end of the profile:
-{% highlight %}
-export PATH=/usr/local/cuda-8.0/bin:$PATH
+
+export PATH=/usr/local/cuda-8.0/bin:$PATH 
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
-{% endhighlight %}
+
 
 The installation part has finished
 
