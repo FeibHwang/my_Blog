@@ -55,7 +55,7 @@ run command: `$ lsmod | grep nouveau` if something show up, then nouveau is curr
 To disable it:
 Creat file named `blacklist-nouveau.conf` under `/etc/modprobe.d`, adding following content
 
-blacklist nouveau
+blacklist nouveau 
 options nouveau modeset=0
 
 Then run: `$ sudo update-initramfs –u`
